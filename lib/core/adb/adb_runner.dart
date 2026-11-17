@@ -11,6 +11,7 @@ import 'models/adb_device.dart';
 class AdbRunner implements AdbBackend {
   final AdbLocator locator;
   final AdbClient client;
+  bool _serverStarted = false;
 
   AdbRunner({
     AdbLocator? locator,
@@ -36,14 +37,25 @@ class AdbRunner implements AdbBackend {
 
   @override
   Future<bool> startServer() async {
+    if (_serverStarted && await client.isServerRunning()) {
+      return true;
+    }
+
     final path = await getAdbPath();
-    if (path == null) return false;
+    if (path == null) {
+      debugPrint('AdbRunner: Cannot start server - adb not found');
+      return false;
+    }
 
     try {
+      debugPrint('AdbRunner: Starting adb server...');
       final res = await Process.run(path, ['start-server'], runInShell: false);
-      return res.exitCode == 0;
+      _serverStarted = res.exitCode == 0;
+      debugPrint(
+          'AdbRunner: start-server exit=${res.exitCode}, stdout=${res.stdout}');
+      return _serverStarted;
     } catch (e) {
-      debugPrint('AdbRunner startServer failed: $e');
+      debugPrint('AdbRunner: startServer failed: $e');
       return false;
     }
   }
@@ -55,6 +67,7 @@ class AdbRunner implements AdbBackend {
 
     try {
       final res = await Process.run(path, ['kill-server'], runInShell: false);
+      _serverStarted = false;
       return res.exitCode == 0;
     } catch (e) {
       return false;
@@ -62,12 +75,17 @@ class AdbRunner implements AdbBackend {
   }
 
   @override
-  Stream<List<AdbDevice>> trackDevices() {
-    return client.trackDevices();
+  Stream<List<AdbDevice>> trackDevices() async* {
+    await startServer();
+    yield* client.trackDevices();
   }
 
   @override
   Future<List<AdbDevice>> getDevices() async {
+    await startServer();
+    final socketDevices = await client.getDevicesList();
+    if (socketDevices.isNotEmpty) return socketDevices;
+
     final path = await getAdbPath();
     if (path == null) return [];
 
@@ -100,16 +118,20 @@ class AdbRunner implements AdbBackend {
     final path = await getAdbPath();
     if (path == null) return false;
 
+    await startServer();
+
     try {
+      debugPrint('AdbRunner: pairing $ip:$port ...');
       final res = await Process.run(
         path,
         ['pair', '$ip:$port', code.trim()],
         runInShell: false,
       );
-      final output = '${res.stdout} ${res.stderr}';
-      return output.contains('Successfully paired') || res.exitCode == 0;
+      final output = '${res.stdout} ${res.stderr}'.toLowerCase();
+      debugPrint('AdbRunner: pair result: $output');
+      return output.contains('successfully paired');
     } catch (e) {
-      debugPrint('Pair error: $e');
+      debugPrint('AdbRunner: pair error: $e');
       return false;
     }
   }
@@ -123,16 +145,25 @@ class AdbRunner implements AdbBackend {
     final path = await getAdbPath();
     if (path == null) return false;
 
+    await startServer();
+
     try {
+      debugPrint('AdbRunner: connecting to $ip:$port ...');
       final res = await Process.run(
         path,
         ['connect', '$ip:$port'],
         runInShell: false,
       );
-      final output = '${res.stdout} ${res.stderr}';
-      return output.contains('connected to') || res.exitCode == 0;
+      final output = '${res.stdout} ${res.stderr}'.toLowerCase();
+      debugPrint('AdbRunner: connect result: $output');
+      final isSuccess = (output.contains('connected to') ||
+              output.contains('already connected to')) &&
+          !output.contains('cannot connect') &&
+          !output.contains('failed to connect') &&
+          !output.contains('unable to connect');
+      return isSuccess;
     } catch (e) {
-      debugPrint('Connect error: $e');
+      debugPrint('AdbRunner: connect error: $e');
       return false;
     }
   }
@@ -159,6 +190,8 @@ class AdbRunner implements AdbBackend {
     final path = await getAdbPath();
     if (path == null) throw StateError('ADB executable not found.');
 
+    await startServer();
+
     final res = await Process.run(path, args, runInShell: false);
     if (res.exitCode != 0) {
       throw Exception('ADB failed (${res.exitCode}): ${res.stderr}');
@@ -170,6 +203,8 @@ class AdbRunner implements AdbBackend {
   Stream<String> runAdbCommandStream(List<String> args) async* {
     final path = await getAdbPath();
     if (path == null) throw StateError('ADB executable not found.');
+
+    await startServer();
 
     final process = await Process.start(path, args, runInShell: false);
     yield* process.stdout

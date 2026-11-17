@@ -16,12 +16,23 @@ class ConnectionManager {
       StreamController<Map<String, HopperConnectionState>>.broadcast();
 
   final Map<String, Timer?> _reconnectTimers = {};
+  StreamSubscription? _discoverySub;
 
   ConnectionManager({
     required this.adbBackend,
     required this.discoveryBackend,
     this.reconnectPolicy = const ReconnectPolicy(),
-  });
+  }) {
+    _initDiscoveryListener();
+  }
+
+  void _initDiscoveryListener() {
+    _discoverySub = discoveryBackend.servicesStream.listen((services) {
+      for (final s in services) {
+        onMdnsServiceDiscovered(s);
+      }
+    });
+  }
 
   Stream<Map<String, HopperConnectionState>> get statesStream =>
       _controller.stream;
@@ -32,7 +43,9 @@ class ConnectionManager {
 
   void updateState(HopperConnectionState newState) {
     _states[newState.deviceId] = newState;
-    _controller.add(Map.unmodifiable(_states));
+    if (!_controller.isClosed) {
+      _controller.add(Map.unmodifiable(_states));
+    }
   }
 
   Future<bool> connectDevice(
@@ -125,6 +138,7 @@ class ConnectionManager {
   }
 
   void dispose() {
+    _discoverySub?.cancel();
     for (final timer in _reconnectTimers.values) {
       timer?.cancel();
     }

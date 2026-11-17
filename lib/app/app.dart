@@ -38,6 +38,7 @@ class HopperMainScaffold extends ConsumerWidget {
     final nav = ref.watch(navigationProvider);
     final navNotifier = ref.read(navigationProvider.notifier);
     final devicesAsync = ref.watch(adbDevicesStreamProvider);
+    final adbStatusAsync = ref.watch(adbStatusProvider);
 
     return Scaffold(
       body: Column(
@@ -239,23 +240,67 @@ class HopperMainScaffold extends ConsumerWidget {
             height: 28,
             color: AppTokens.surface,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.check_circle, size: 14, color: AppTokens.success),
-                SizedBox(width: 6),
-                Text(
-                  'adb server operational',
+                adbStatusAsync.when(
+                  data: (status) => Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        status.serverRunning
+                            ? Icons.check_circle
+                            : Icons.warning_amber,
+                        size: 14,
+                        color: status.serverRunning
+                            ? AppTokens.success
+                            : AppTokens.warning,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        status.path != null
+                            ? (status.serverRunning
+                                ? 'adb operational (${status.version})'
+                                : 'adb server stopped')
+                            : 'adb not found (Platform Tools missing)',
+                        style: const TextStyle(
+                            fontSize: 11, color: AppTokens.textMuted),
+                      ),
+                    ],
+                  ),
+                  loading: () => const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 10,
+                        height: 10,
+                        child: CircularProgressIndicator(strokeWidth: 1.5),
+                      ),
+                      SizedBox(width: 6),
+                      Text('Initializing adb...',
+                          style: TextStyle(
+                              fontSize: 11, color: AppTokens.textMuted)),
+                    ],
+                  ),
+                  error: (e, _) => Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.error, size: 14, color: AppTokens.error),
+                      const SizedBox(width: 6),
+                      Text('adb error: $e',
+                          style: const TextStyle(
+                              fontSize: 11, color: AppTokens.error)),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                const Icon(Icons.wifi, size: 14, color: AppTokens.accent),
+                const SizedBox(width: 6),
+                const Text(
+                  'Wi-Fi Discovery: Active',
                   style: TextStyle(fontSize: 11, color: AppTokens.textMuted),
                 ),
-                SizedBox(width: 16),
-                Icon(Icons.wifi, size: 14, color: AppTokens.accent),
-                SizedBox(width: 6),
-                Text(
-                  'Wi-Fi: LAN (Private)',
-                  style: TextStyle(fontSize: 11, color: AppTokens.textMuted),
-                ),
-                Spacer(),
-                Text(
+                const Spacer(),
+                const Text(
                   'Hopper v1.0.0',
                   style: TextStyle(fontSize: 11, color: AppTokens.textMuted),
                 ),

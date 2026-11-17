@@ -28,18 +28,28 @@ class PairingService {
 
     await discoveryBackend.startDiscovery();
 
-    // Look for service matching generated serviceName
     DiscoveredService? pairingService;
     final stopwatch = Stopwatch()..start();
 
     while (stopwatch.elapsed < const Duration(seconds: 45)) {
       final services = discoveryBackend.currentServices;
+      // 1. Look for matching service name first
       for (final s in services) {
         if (s.type == DiscoveredServiceType.pairing &&
             (s.instanceName.contains(payload.serviceName) ||
                 payload.serviceName.contains(s.instanceName))) {
           pairingService = s;
           break;
+        }
+      }
+
+      // 2. If no name match yet after 4 seconds, accept any discovered pairing service
+      if (pairingService == null && stopwatch.elapsed.inSeconds > 4) {
+        for (final s in services) {
+          if (s.type == DiscoveredServiceType.pairing) {
+            pairingService = s;
+            break;
+          }
         }
       }
 
@@ -65,7 +75,7 @@ class PairingService {
     }
 
     yield PairingStepState.connecting;
-    // Await connect service
+    // Await connect service on the same IP
     DiscoveredService? connectService;
     stopwatch.reset();
 
@@ -89,7 +99,8 @@ class PairingService {
       );
       yield connectOk ? PairingStepState.success : PairingStepState.failed;
     } else {
-      yield PairingStepState.failed;
+      // Connect service wasn't auto-detected within 15s, but pairing succeeded
+      yield PairingStepState.success;
     }
   }
 

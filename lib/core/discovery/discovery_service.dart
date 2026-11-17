@@ -12,7 +12,8 @@ class DiscoveryService implements DiscoveryBackend {
       StreamController<List<DiscoveredService>>.broadcast();
 
   MDnsClient? _mdnsClient;
-  Timer? _pollTimer;
+  Timer? _adbMdnsTimer;
+  Timer? _mdnsTimer;
   bool _isDiscovering = false;
   final Map<String, DiscoveredService> _discovered = {};
 
@@ -29,31 +30,47 @@ class DiscoveryService implements DiscoveryBackend {
     if (_isDiscovering) return;
     _isDiscovering = true;
 
+    // 1. Immediately and periodically poll `adb mdns services` (primary & robust)
+    _startAdbMdnsPolling();
+
+    // 2. Also start multicast_dns client in parallel
     try {
       _mdnsClient = MDnsClient();
       await _mdnsClient!.start();
-      _pollTimer =
+      _mdnsTimer =
           Timer.periodic(const Duration(seconds: 4), (_) => _scanMdns());
       _scanMdns();
     } catch (e) {
-      debugPrint('mDNS client failed to start, falling back to adb mdns: $e');
-      _startAdbMdnsFallback();
+      debugPrint('mDNS client could not start: $e (adb mdns active)');
     }
   }
 
-  void _startAdbMdnsFallback() {
-    _pollTimer?.cancel();
-    _pollTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
-      if (adbBackend == null) return;
-      try {
-        final out = await adbBackend!.runAdbCommand(['mdns', 'services']);
-        final parsed = AdbMdnsFallback.parseServices(out);
-        for (final s in parsed) {
-          _discovered['${s.type}_${s.instanceName}'] = s;
+  void _startAdbMdnsPolling() {
+    _adbMdnsTimer?.cancel();
+    // Immediate first check
+    _queryAdbMdns();
+    // Recurring poll every 2 seconds
+    _adbMdnsTimer =
+        Timer.periodic(const Duration(seconds: 2), (_) => _queryAdbMdns());
+  }
+
+  Future<void> _queryAdbMdns() async {
+    if (adbBackend == null) return;
+    try {
+      final out = await adbBackend!.runAdbCommand(['mdns', 'services']);
+      final parsed = AdbMdnsFallback.parseServices(out);
+      bool changed = false;
+      for (final s in parsed) {
+        final key = '${s.type.name}_${s.ip}_${s.port}';
+        if (!_discovered.containsKey(key)) {
+          _discovered[key] = s;
+          changed = true;
         }
+      }
+      if (changed && !_controller.isClosed) {
         _controller.add(_discovered.values.toList());
-      } catch (_) {}
-    });
+      }
+    } catch (_) {}
   }
 
   Future<void> _scanMdns() async {
@@ -64,18 +81,24 @@ class DiscoveryService implements DiscoveryBackend {
 
     for (final serviceType in [pairingType, connectType]) {
       try {
-        await for (final PtrResourceRecord ptr
-            in _mdnsClient!.lookup<PtrResourceRecord>(
-          ResourceRecordQuery.serverPointer(serviceType),
-        )) {
-          await for (final SrvResourceRecord srv
-              in _mdnsClient!.lookup<SrvResourceRecord>(
-            ResourceRecordQuery.service(ptr.domainName),
-          )) {
-            await for (final IPAddressResourceRecord ip
-                in _mdnsClient!.lookup<IPAddressResourceRecord>(
-              ResourceRecordQuery.addressIPv4(srv.target),
-            )) {
+        await for (final PtrResourceRecord ptr in _mdnsClient!
+            .lookup<PtrResourceRecord>(
+              ResourceRecordQuery.serverPointer(serviceType),
+            )
+            .timeout(const Duration(seconds: 2),
+                onTimeout: (sink) => sink.close())) {
+          await for (final SrvResourceRecord srv in _mdnsClient!
+              .lookup<SrvResourceRecord>(
+                ResourceRecordQuery.service(ptr.domainName),
+              )
+              .timeout(const Duration(seconds: 2),
+                  onTimeout: (sink) => sink.close())) {
+            await for (final IPAddressResourceRecord ip in _mdnsClient!
+                .lookup<IPAddressResourceRecord>(
+                  ResourceRecordQuery.addressIPv4(srv.target),
+                )
+                .timeout(const Duration(seconds: 2),
+                    onTimeout: (sink) => sink.close())) {
               final isPairing = serviceType.contains('pairing');
               final instanceName = ptr.domainName.split('.').first;
 
@@ -88,13 +111,19 @@ class DiscoveryService implements DiscoveryBackend {
                 port: srv.port,
               );
 
-              _discovered['${discovered.type}_$instanceName'] = discovered;
-              _controller.add(_discovered.values.toList());
+              final key =
+                  '${discovered.type.name}_${discovered.ip}_${discovered.port}';
+              if (!_discovered.containsKey(key)) {
+                _discovered[key] = discovered;
+                if (!_controller.isClosed) {
+                  _controller.add(_discovered.values.toList());
+                }
+              }
             }
           }
         }
       } catch (e) {
-        debugPrint('mDNS query error: $e');
+        // Ignored, fallback handles discovery
       }
     }
   }
@@ -102,8 +131,10 @@ class DiscoveryService implements DiscoveryBackend {
   @override
   Future<void> stopDiscovery() async {
     _isDiscovering = false;
-    _pollTimer?.cancel();
-    _pollTimer = null;
+    _adbMdnsTimer?.cancel();
+    _adbMdnsTimer = null;
+    _mdnsTimer?.cancel();
+    _mdnsTimer = null;
     _mdnsClient?.stop();
     _mdnsClient = null;
   }
