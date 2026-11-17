@@ -17,8 +17,8 @@ class AppTokens {
   static const Color accentHover = Color(0xFF14B8A6);
   static const Color success = Color(0xFF34D399); // Green
   static const Color warning = Color(0xFFF5B83D); // Amber
-  static const Color error = Color(0xFFF26D6D);   // Red
-  static const Color info = Color(0xFF60A5FA);    // Blue
+  static const Color error = Color(0xFFF26D6D); // Red
+  static const Color info = Color(0xFF60A5FA); // Blue
 
   // Geometry
   static const double radiusSm = 4.0;

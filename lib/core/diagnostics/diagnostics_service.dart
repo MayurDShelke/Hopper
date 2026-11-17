@@ -47,7 +47,8 @@ class DiagnosticsService {
     ];
   }
 
-  Future<List<DiagnosticResult>> runAllChecks({Map<String, dynamic>? params}) async {
+  Future<List<DiagnosticResult>> runAllChecks(
+      {Map<String, dynamic>? params}) async {
     final results = <DiagnosticResult>[];
     for (final check in _checks) {
       final res = await check.run(params: params);

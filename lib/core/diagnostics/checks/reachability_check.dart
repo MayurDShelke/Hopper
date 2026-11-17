@@ -41,8 +41,10 @@ class ReachabilityCheck implements DiagnosticCheck {
         id: id,
         title: title,
         status: DiagnosticStatus.failed,
-        message: 'Cannot reach $ip:$port ($e). Router Client Isolation may be active.',
-        fixPrompt: 'Ensure phone and PC are on the same Wi-Fi, disable AP/Client Isolation in router settings, or use phone hotspot.',
+        message:
+            'Cannot reach $ip:$port ($e). Router Client Isolation may be active.',
+        fixPrompt:
+            'Ensure phone and PC are on the same Wi-Fi, disable AP/Client Isolation in router settings, or use phone hotspot.',
       );
     }
   }

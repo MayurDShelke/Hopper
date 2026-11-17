@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/theme/tokens.dart';
 import '../../app/router.dart';
-import '../../core/adb/models/adb_device.dart';
 import '../../core/connection/connection_state.dart';
 import '../../shared/widgets/status_dot.dart';
 import '../../shared/widgets/empty_state.dart';
@@ -36,7 +35,8 @@ class DevicesView extends ConsumerWidget {
         return ListView.separated(
           padding: const EdgeInsets.all(AppTokens.space24),
           itemCount: devices.length,
-          separatorBuilder: (_, __) => const SizedBox(height: AppTokens.space12),
+          separatorBuilder: (_, __) =>
+              const SizedBox(height: AppTokens.space12),
           itemBuilder: (context, index) {
             final dev = devices[index];
             final status = dev.isConnected
@@ -93,32 +93,48 @@ class DevicesView extends ConsumerWidget {
                           icon: const Icon(Icons.cast, size: 16),
                           label: const Text('Mirror (scrcpy)'),
                           onPressed: () {
-                            ref.read(navigationProvider.notifier).selectDevice(dev.serial);
-                            ref.read(navigationProvider.notifier).setTab(AppTab.mirror);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .selectDevice(dev.serial);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .setTab(AppTab.mirror);
                           },
                         ),
                         OutlinedButton.icon(
                           icon: const Icon(Icons.article_outlined, size: 16),
                           label: const Text('Logcat'),
                           onPressed: () {
-                            ref.read(navigationProvider.notifier).selectDevice(dev.serial);
-                            ref.read(navigationProvider.notifier).setTab(AppTab.logcat);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .selectDevice(dev.serial);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .setTab(AppTab.logcat);
                           },
                         ),
                         OutlinedButton.icon(
                           icon: const Icon(Icons.install_mobile, size: 16),
                           label: const Text('Install APK'),
                           onPressed: () {
-                            ref.read(navigationProvider.notifier).selectDevice(dev.serial);
-                            ref.read(navigationProvider.notifier).setTab(AppTab.install);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .selectDevice(dev.serial);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .setTab(AppTab.install);
                           },
                         ),
                         OutlinedButton.icon(
                           icon: const Icon(Icons.flutter_dash, size: 16),
                           label: const Text('Flutter Runner'),
                           onPressed: () {
-                            ref.read(navigationProvider.notifier).selectDevice(dev.serial);
-                            ref.read(navigationProvider.notifier).setTab(AppTab.flutterPanel);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .selectDevice(dev.serial);
+                            ref
+                                .read(navigationProvider.notifier)
+                                .setTab(AppTab.flutterPanel);
                           },
                         ),
                       ],

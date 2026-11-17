@@ -19,7 +19,7 @@ class AppTheme {
         error: AppTokens.error,
         outline: AppTokens.border,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AppTokens.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -28,7 +28,7 @@ class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: AppTokens.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppTokens.radiusMd),
@@ -77,7 +77,8 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppTokens.radiusMd),
           borderSide: const BorderSide(color: AppTokens.accent, width: 1.5),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         hintStyle: const TextStyle(color: AppTokens.textMuted),
       ),
     );

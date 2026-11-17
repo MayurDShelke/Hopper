@@ -23,7 +23,8 @@ class AdbClient {
   Future<String?> getServerVersion() async {
     Socket? socket;
     try {
-      socket = await Socket.connect(host, port, timeout: const Duration(seconds: 2));
+      socket =
+          await Socket.connect(host, port, timeout: const Duration(seconds: 2));
       final request = formatRequest('host:version');
       socket.write(request);
       await socket.flush();
@@ -49,7 +50,8 @@ class AdbClient {
     while (true) {
       Socket? socket;
       try {
-        socket = await Socket.connect(host, port, timeout: const Duration(seconds: 3));
+        socket = await Socket.connect(host, port,
+            timeout: const Duration(seconds: 3));
         final req = formatRequest('host:track-devices');
         socket.write(req);
         await socket.flush();
@@ -70,7 +72,8 @@ class AdbClient {
                 final status = buffer.substring(0, 4);
                 if (status != 'OKAY') {
                   socket?.destroy();
-                  controller.addError(Exception('ADB track-devices returned: $status'));
+                  controller.addError(
+                      Exception('ADB track-devices returned: $status'));
                   return;
                 }
                 validated = true;
@@ -96,7 +99,8 @@ class AdbClient {
                       .where((l) => l.trim().isNotEmpty)
                       .toList();
 
-                  final devices = lines.map((l) => AdbDevice.fromTrackLine(l)).toList();
+                  final devices =
+                      lines.map((l) => AdbDevice.fromTrackLine(l)).toList();
                   controller.add(devices);
                 } else {
                   break;

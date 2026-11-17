@@ -74,7 +74,8 @@ class _DiagnosticsViewState extends ConsumerState<DiagnosticsView> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.troubleshoot, color: AppTokens.accent, size: 28),
+                  const Icon(Icons.troubleshoot,
+                      color: AppTokens.accent, size: 28),
                   const SizedBox(width: AppTokens.space12),
                   const Expanded(
                     child: Column(
@@ -89,7 +90,8 @@ class _DiagnosticsViewState extends ConsumerState<DiagnosticsView> {
                         ),
                         Text(
                           'Automated network, firewall, and ADB server health checks',
-                          style: TextStyle(fontSize: 12, color: AppTokens.textMuted),
+                          style: TextStyle(
+                              fontSize: 12, color: AppTokens.textMuted),
                         ),
                       ],
                     ),
@@ -106,11 +108,13 @@ class _DiagnosticsViewState extends ConsumerState<DiagnosticsView> {
                     onPressed: _results.isEmpty
                         ? null
                         : () {
-                            final report = service.generateExportReport(_results);
+                            final report =
+                                service.generateExportReport(_results);
                             Clipboard.setData(ClipboardData(text: report));
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Diagnostics report copied to clipboard!'),
+                                content: Text(
+                                    'Diagnostics report copied to clipboard!'),
                               ),
                             );
                           },
@@ -128,7 +132,8 @@ class _DiagnosticsViewState extends ConsumerState<DiagnosticsView> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _results.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: AppTokens.space8),
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: AppTokens.space8),
                   itemBuilder: (context, index) {
                     final item = _results[index];
                     final color = _getStatusColor(item.status);
@@ -139,7 +144,8 @@ class _DiagnosticsViewState extends ConsumerState<DiagnosticsView> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(_getStatusIcon(item.status), color: color, size: 22),
+                            Icon(_getStatusIcon(item.status),
+                                color: color, size: 22),
                             const SizedBox(width: AppTokens.space12),
                             Expanded(
                               child: Column(

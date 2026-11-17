@@ -7,7 +7,8 @@ void main() {
   group('AdbClient & Protocol Parser', () {
     test('formatRequest prepends 4-digit hex length', () {
       expect(AdbClient.formatRequest('host:version'), '000chost:version');
-      expect(AdbClient.formatRequest('host:track-devices'), '0012host:track-devices');
+      expect(AdbClient.formatRequest('host:track-devices'),
+          '0012host:track-devices');
     });
 
     test('AdbDevice parses standard adb track line with model & product', () {

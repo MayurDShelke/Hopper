@@ -101,7 +101,9 @@ class _InstallViewState extends ConsumerState<InstallView> {
                                   ),
                                 ),
                                 Text(
-                                  serial != null ? 'Target: $serial' : 'No target phone selected',
+                                  serial != null
+                                      ? 'Target: $serial'
+                                      : 'No target phone selected',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: AppTokens.textMuted,
@@ -115,13 +117,17 @@ class _InstallViewState extends ConsumerState<InstallView> {
                       const SizedBox(height: AppTokens.space20),
                       // Drop zone
                       DropTarget(
-                        onDragEntered: (_) => setState(() => _isDragging = true),
-                        onDragExited: (_) => setState(() => _isDragging = false),
+                        onDragEntered: (_) =>
+                            setState(() => _isDragging = true),
+                        onDragExited: (_) =>
+                            setState(() => _isDragging = false),
                         onDragDone: (detail) {
                           setState(() => _isDragging = false);
                           if (serial == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Please select a target device first.')),
+                              const SnackBar(
+                                  content: Text(
+                                      'Please select a target device first.')),
                             );
                             return;
                           }
@@ -135,11 +141,14 @@ class _InstallViewState extends ConsumerState<InstallView> {
                           height: 180,
                           decoration: BoxDecoration(
                             color: _isDragging
-                                ? AppTokens.accent.withOpacity(0.1)
+                                ? AppTokens.accent.withValues(alpha: 0.1)
                                 : AppTokens.surfaceVariant,
-                            borderRadius: BorderRadius.circular(AppTokens.radiusMd),
+                            borderRadius:
+                                BorderRadius.circular(AppTokens.radiusMd),
                             border: Border.all(
-                              color: _isDragging ? AppTokens.accent : AppTokens.border,
+                              color: _isDragging
+                                  ? AppTokens.accent
+                                  : AppTokens.border,
                               width: 2,
                               strokeAlign: BorderSide.strokeAlignInside,
                             ),
@@ -151,7 +160,9 @@ class _InstallViewState extends ConsumerState<InstallView> {
                                 Icon(
                                   Icons.cloud_upload_outlined,
                                   size: 48,
-                                  color: _isDragging ? AppTokens.accent : AppTokens.textMuted,
+                                  color: _isDragging
+                                      ? AppTokens.accent
+                                      : AppTokens.textMuted,
                                 ),
                                 const SizedBox(height: AppTokens.space12),
                                 Text(
@@ -159,7 +170,9 @@ class _InstallViewState extends ConsumerState<InstallView> {
                                       ? 'Drop APK file to install'
                                       : 'Drag and drop .apk file here',
                                   style: TextStyle(
-                                    color: _isDragging ? AppTokens.accent : AppTokens.text,
+                                    color: _isDragging
+                                        ? AppTokens.accent
+                                        : AppTokens.text,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),

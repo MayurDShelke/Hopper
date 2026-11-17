@@ -42,7 +42,8 @@ class FirewallCheck implements DiagnosticCheck {
           title: title,
           status: DiagnosticStatus.warning,
           message: 'No explicit firewall exception found for ADB/Hopper.',
-          fixPrompt: 'When prompted by Windows Defender Firewall, allow Hopper on Private networks.',
+          fixPrompt:
+              'When prompted by Windows Defender Firewall, allow Hopper on Private networks.',
         );
       }
     } catch (e) {

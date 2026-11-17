@@ -9,16 +9,20 @@ class ErrorMapper {
     if (str.contains('INSTALL_FAILED_UPDATE_INCOMPATIBLE')) {
       return const AppError(
         title: 'Installation Incompatible',
-        cause: 'The application signature does not match the version currently installed.',
-        fix: 'Uninstall the existing version from your phone first and try again.',
+        cause:
+            'The application signature does not match the version currently installed.',
+        fix:
+            'Uninstall the existing version from your phone first and try again.',
       );
     }
 
     if (str.contains('INSTALL_FAILED_VERSION_DOWNGRADE')) {
       return const AppError(
         title: 'Version Downgrade Blocked',
-        cause: 'The APK you are trying to install is older than the installed version.',
-        fix: 'Enable Allow Downgrade in install options or uninstall the newer app first.',
+        cause:
+            'The APK you are trying to install is older than the installed version.',
+        fix:
+            'Enable Allow Downgrade in install options or uninstall the newer app first.',
       );
     }
 
@@ -34,7 +38,8 @@ class ErrorMapper {
       return const AppError(
         title: 'Installation Restricted by Phone',
         cause: 'The phone operating system blocked USB/wireless installation.',
-        fix: 'On Xiaomi/Redmi phones, open Developer options and enable "Install via USB".',
+        fix:
+            'On Xiaomi/Redmi phones, open Developer options and enable "Install via USB".',
       );
     }
 
@@ -42,15 +47,18 @@ class ErrorMapper {
       return const AppError(
         title: 'Connection Refused',
         cause: 'Wireless debugging may have turned off or the port changed.',
-        fix: 'Ensure Wireless debugging is still enabled on your phone and refresh discovery.',
+        fix:
+            'Ensure Wireless debugging is still enabled on your phone and refresh discovery.',
       );
     }
 
     if (str.contains('timed out') || str.contains('timeout')) {
       return const AppError(
         title: 'Connection Timed Out',
-        cause: 'The phone did not reply in time. Router AP/Client Isolation may be active.',
-        fix: 'Check that phone and laptop are on the same private Wi-Fi and not a guest network.',
+        cause:
+            'The phone did not reply in time. Router AP/Client Isolation may be active.',
+        fix:
+            'Check that phone and laptop are on the same private Wi-Fi and not a guest network.',
       );
     }
 

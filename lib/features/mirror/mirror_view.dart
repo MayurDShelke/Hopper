@@ -67,7 +67,8 @@ class _MirrorViewState extends ConsumerState<MirrorView> {
         setState(() => _isMirroring = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to launch scrcpy: $e. Ensure scrcpy is installed or bundled.'),
+            content: Text(
+                'Failed to launch scrcpy: $e. Ensure scrcpy is installed or bundled.'),
             backgroundColor: AppTokens.error,
           ),
         );
@@ -112,7 +113,8 @@ class _MirrorViewState extends ConsumerState<MirrorView> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.cast, color: AppTokens.accent, size: 28),
+                          const Icon(Icons.cast,
+                              color: AppTokens.accent, size: 28),
                           const SizedBox(width: AppTokens.space12),
                           Expanded(
                             child: Column(
@@ -126,7 +128,9 @@ class _MirrorViewState extends ConsumerState<MirrorView> {
                                   ),
                                 ),
                                 Text(
-                                  serial != null ? 'Target: $serial' : 'No target phone selected',
+                                  serial != null
+                                      ? 'Target: $serial'
+                                      : 'No target phone selected',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: AppTokens.textMuted,
@@ -156,7 +160,8 @@ class _MirrorViewState extends ConsumerState<MirrorView> {
                           max: 16,
                           divisions: 7,
                           label: '$_bitrate Mbps',
-                          onChanged: (v) => setState(() => _bitrate = v.toInt()),
+                          onChanged: (v) =>
+                              setState(() => _bitrate = v.toInt()),
                         ),
                         trailing: Text('$_bitrate M'),
                       ),
@@ -167,21 +172,31 @@ class _MirrorViewState extends ConsumerState<MirrorView> {
                           items: const [
                             DropdownMenuItem(value: 720, child: Text('720p')),
                             DropdownMenuItem(value: 1080, child: Text('1080p')),
-                            DropdownMenuItem(value: 1440, child: Text('1440p (2K)')),
+                            DropdownMenuItem(
+                                value: 1440, child: Text('1440p (2K)')),
                           ],
-                          onChanged: (v) => setState(() => _maxSize = v ?? 1080),
+                          onChanged: (v) =>
+                              setState(() => _maxSize = v ?? 1080),
                         ),
                       ),
                       const SizedBox(height: AppTokens.space20),
                       Center(
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: _isMirroring ? AppTokens.error : AppTokens.accent,
-                            foregroundColor: _isMirroring ? Colors.white : AppTokens.background,
-                            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                            backgroundColor: _isMirroring
+                                ? AppTokens.error
+                                : AppTokens.accent,
+                            foregroundColor: _isMirroring
+                                ? Colors.white
+                                : AppTokens.background,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 28, vertical: 14),
                           ),
-                          icon: Icon(_isMirroring ? Icons.stop : Icons.play_arrow),
-                          label: Text(_isMirroring ? 'Stop Mirroring' : 'Start Mirroring'),
+                          icon: Icon(
+                              _isMirroring ? Icons.stop : Icons.play_arrow),
+                          label: Text(_isMirroring
+                              ? 'Stop Mirroring'
+                              : 'Start Mirroring'),
                           onPressed: serial == null
                               ? null
                               : () {

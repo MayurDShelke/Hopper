@@ -33,9 +33,8 @@ class AdbMdnsFallback {
 
       // Extract instance name
       final dotIdx = serviceFull.indexOf('._adb-tls');
-      final instanceName = dotIdx != -1
-          ? serviceFull.substring(0, dotIdx)
-          : serviceFull;
+      final instanceName =
+          dotIdx != -1 ? serviceFull.substring(0, dotIdx) : serviceFull;
 
       // Extract IP and port
       final addrSplit = addressPart.split(':');

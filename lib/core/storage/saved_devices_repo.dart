@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/connect/domain/saved_device.dart';
 
@@ -21,7 +20,8 @@ class SavedDevicesRepo {
   Future<void> saveDevice(SavedDevice device) async {
     final prefs = await _getPrefs();
     final devices = await getSavedDevices();
-    final index = devices.indexWhere((d) => d.instanceName == device.instanceName);
+    final index =
+        devices.indexWhere((d) => d.instanceName == device.instanceName);
 
     if (index >= 0) {
       devices[index] = device;

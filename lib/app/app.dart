@@ -61,7 +61,8 @@ class HopperMainScaffold extends ConsumerWidget {
                 const Spacer(),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     textStyle: const TextStyle(fontSize: 12),
                   ),
                   icon: const Icon(Icons.add, size: 14),
@@ -90,7 +91,7 @@ class HopperMainScaffold extends ConsumerWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close, size: 16),
-                  hoverColor: Colors.red.withOpacity(0.5),
+                  hoverColor: Colors.red.withValues(alpha: 0.5),
                   onPressed: () => windowManager.close(),
                 ),
               ],
@@ -127,7 +128,8 @@ class HopperMainScaffold extends ConsumerWidget {
                               return const Center(
                                 child: Text(
                                   'No phones attached',
-                                  style: TextStyle(fontSize: 12, color: AppTokens.textMuted),
+                                  style: TextStyle(
+                                      fontSize: 12, color: AppTokens.textMuted),
                                 ),
                               );
                             }
@@ -135,7 +137,8 @@ class HopperMainScaffold extends ConsumerWidget {
                               itemCount: devices.length,
                               itemBuilder: (context, index) {
                                 final d = devices[index];
-                                final isSelected = nav.selectedDeviceId == d.serial;
+                                final isSelected =
+                                    nav.selectedDeviceId == d.serial;
 
                                 return ListTile(
                                   selected: isSelected,
@@ -154,7 +157,9 @@ class HopperMainScaffold extends ConsumerWidget {
                                   ),
                                   subtitle: Text(
                                     d.isWireless ? 'Wi-Fi' : 'USB',
-                                    style: const TextStyle(fontSize: 11, color: AppTokens.textMuted),
+                                    style: const TextStyle(
+                                        fontSize: 11,
+                                        color: AppTokens.textMuted),
                                   ),
                                   onTap: () {
                                     navNotifier.selectDevice(d.serial);
@@ -163,44 +168,52 @@ class HopperMainScaffold extends ConsumerWidget {
                               },
                             );
                           },
-                          loading: () => const Center(child: CircularProgressIndicator()),
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
                           error: (_, __) => const SizedBox.shrink(),
                         ),
                       ),
                       const Divider(height: 1, color: AppTokens.border),
                       ListTile(
                         leading: const Icon(Icons.devices, size: 20),
-                        title: const Text('Device Overview', style: TextStyle(fontSize: 13)),
-                        selected: nav.currentTab == AppTab.devices || nav.currentTab == AppTab.overview,
+                        title: const Text('Device Overview',
+                            style: TextStyle(fontSize: 13)),
+                        selected: nav.currentTab == AppTab.devices ||
+                            nav.currentTab == AppTab.overview,
                         onTap: () => navNotifier.setTab(AppTab.devices),
                       ),
                       ListTile(
                         leading: const Icon(Icons.cast, size: 20),
-                        title: const Text('Mirror (scrcpy)', style: TextStyle(fontSize: 13)),
+                        title: const Text('Mirror (scrcpy)',
+                            style: TextStyle(fontSize: 13)),
                         selected: nav.currentTab == AppTab.mirror,
                         onTap: () => navNotifier.setTab(AppTab.mirror),
                       ),
                       ListTile(
                         leading: const Icon(Icons.article_outlined, size: 20),
-                        title: const Text('Logcat', style: TextStyle(fontSize: 13)),
+                        title: const Text('Logcat',
+                            style: TextStyle(fontSize: 13)),
                         selected: nav.currentTab == AppTab.logcat,
                         onTap: () => navNotifier.setTab(AppTab.logcat),
                       ),
                       ListTile(
                         leading: const Icon(Icons.install_mobile, size: 20),
-                        title: const Text('Install APK', style: TextStyle(fontSize: 13)),
+                        title: const Text('Install APK',
+                            style: TextStyle(fontSize: 13)),
                         selected: nav.currentTab == AppTab.install,
                         onTap: () => navNotifier.setTab(AppTab.install),
                       ),
                       ListTile(
                         leading: const Icon(Icons.flutter_dash, size: 20),
-                        title: const Text('Flutter Runner', style: TextStyle(fontSize: 13)),
+                        title: const Text('Flutter Runner',
+                            style: TextStyle(fontSize: 13)),
                         selected: nav.currentTab == AppTab.flutterPanel,
                         onTap: () => navNotifier.setTab(AppTab.flutterPanel),
                       ),
                       ListTile(
                         leading: const Icon(Icons.troubleshoot, size: 20),
-                        title: const Text('Diagnostics', style: TextStyle(fontSize: 13)),
+                        title: const Text('Diagnostics',
+                            style: TextStyle(fontSize: 13)),
                         selected: nav.currentTab == AppTab.diagnostics,
                         onTap: () => navNotifier.setTab(AppTab.diagnostics),
                       ),
@@ -208,7 +221,8 @@ class HopperMainScaffold extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const VerticalDivider(width: 1, thickness: 1, color: AppTokens.border),
+                const VerticalDivider(
+                    width: 1, thickness: 1, color: AppTokens.border),
                 // Main Content View
                 Expanded(
                   child: Container(

@@ -13,7 +13,8 @@ class FakeDiscoveryBackend implements DiscoveryBackend {
   List<DiscoveredService> get currentServices => List.unmodifiable(_services);
 
   @override
-  Stream<List<DiscoveredService>> get servicesStream => _streamController.stream;
+  Stream<List<DiscoveredService>> get servicesStream =>
+      _streamController.stream;
 
   @override
   Future<void> startDiscovery() async {

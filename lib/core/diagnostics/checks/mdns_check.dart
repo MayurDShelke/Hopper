@@ -30,8 +30,10 @@ class MdnsCheck implements DiagnosticCheck {
         id: id,
         title: title,
         status: DiagnosticStatus.warning,
-        message: 'Port 5353 cannot be bound directly ($e). Hopper will use adb mdns fallback.',
-        fixPrompt: 'Ensure third-party firewall or conflicting services do not block UDP 5353.',
+        message:
+            'Port 5353 cannot be bound directly ($e). Hopper will use adb mdns fallback.',
+        fixPrompt:
+            'Ensure third-party firewall or conflicting services do not block UDP 5353.',
       );
     } finally {
       socket?.close();

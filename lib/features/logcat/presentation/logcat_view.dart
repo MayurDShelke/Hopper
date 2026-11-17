@@ -144,9 +144,11 @@ class _LogcatViewState extends ConsumerState<LogcatView> {
                   return FilterChip(
                     label: Text(lvl.code, style: const TextStyle(fontSize: 11)),
                     selected: isSelected,
-                    selectedColor: _getLevelColor(lvl).withOpacity(0.3),
+                    selectedColor: _getLevelColor(lvl).withValues(alpha: 0.3),
                     labelStyle: TextStyle(
-                      color: isSelected ? _getLevelColor(lvl) : AppTokens.textMuted,
+                      color: isSelected
+                          ? _getLevelColor(lvl)
+                          : AppTokens.textMuted,
                       fontWeight: FontWeight.bold,
                     ),
                     onSelected: (selected) {

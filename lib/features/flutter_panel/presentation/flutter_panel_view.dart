@@ -79,11 +79,15 @@ class _FlutterPanelViewState extends ConsumerState<FlutterPanelView> {
                       DropdownButton<String>(
                         value: _buildMode,
                         items: const [
-                          DropdownMenuItem(value: 'debug', child: Text('Debug')),
-                          DropdownMenuItem(value: 'profile', child: Text('Profile')),
-                          DropdownMenuItem(value: 'release', child: Text('Release')),
+                          DropdownMenuItem(
+                              value: 'debug', child: Text('Debug')),
+                          DropdownMenuItem(
+                              value: 'profile', child: Text('Profile')),
+                          DropdownMenuItem(
+                              value: 'release', child: Text('Release')),
                         ],
-                        onChanged: (v) => setState(() => _buildMode = v ?? 'debug'),
+                        onChanged: (v) =>
+                            setState(() => _buildMode = v ?? 'debug'),
                       ),
                     ],
                   ),
@@ -101,13 +105,16 @@ class _FlutterPanelViewState extends ConsumerState<FlutterPanelView> {
                       ),
                       const SizedBox(width: AppTokens.space12),
                       ElevatedButton.icon(
-                        icon: Icon(runner.isRunning ? Icons.stop : Icons.play_arrow),
+                        icon: Icon(
+                            runner.isRunning ? Icons.stop : Icons.play_arrow),
                         label: Text(runner.isRunning ? 'Stop' : 'Run'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              runner.isRunning ? AppTokens.error : AppTokens.accent,
-                          foregroundColor:
-                              runner.isRunning ? Colors.white : AppTokens.background,
+                          backgroundColor: runner.isRunning
+                              ? AppTokens.error
+                              : AppTokens.accent,
+                          foregroundColor: runner.isRunning
+                              ? Colors.white
+                              : AppTokens.background,
                         ),
                         onPressed: serial == null
                             ? null
@@ -116,7 +123,8 @@ class _FlutterPanelViewState extends ConsumerState<FlutterPanelView> {
                                   runner.stop();
                                 } else {
                                   runner.runProject(
-                                    projectDirectory: _dirController.text.trim(),
+                                    projectDirectory:
+                                        _dirController.text.trim(),
                                     serial: serial,
                                     buildMode: _buildMode,
                                   );
@@ -128,13 +136,15 @@ class _FlutterPanelViewState extends ConsumerState<FlutterPanelView> {
                       OutlinedButton.icon(
                         icon: const Icon(Icons.flash_on, size: 16),
                         label: const Text('Reload (r)'),
-                        onPressed: runner.isRunning ? () => runner.hotReload() : null,
+                        onPressed:
+                            runner.isRunning ? () => runner.hotReload() : null,
                       ),
                       const SizedBox(width: AppTokens.space8),
                       OutlinedButton.icon(
                         icon: const Icon(Icons.refresh, size: 16),
                         label: const Text('Restart (R)'),
-                        onPressed: runner.isRunning ? () => runner.hotRestart() : null,
+                        onPressed:
+                            runner.isRunning ? () => runner.hotRestart() : null,
                       ),
                     ],
                   ),

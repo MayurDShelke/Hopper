@@ -19,7 +19,8 @@ class ToolInstaller {
   }) async {
     try {
       final appSupport = await getApplicationSupportDirectory();
-      final destinationDir = Directory(p.join(appSupport.path, 'bin', targetSubdir));
+      final destinationDir =
+          Directory(p.join(appSupport.path, 'bin', targetSubdir));
 
       if (await destinationDir.exists()) {
         return destinationDir.path;

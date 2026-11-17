@@ -27,8 +27,7 @@ class ConnectionManager {
       _controller.stream;
 
   HopperConnectionState getState(String deviceId) {
-    return _states[deviceId] ??
-        HopperConnectionState(deviceId: deviceId);
+    return _states[deviceId] ?? HopperConnectionState(deviceId: deviceId);
   }
 
   void updateState(HopperConnectionState newState) {

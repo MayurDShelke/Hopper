@@ -81,7 +81,8 @@ class AdbLocator {
       }
     }
 
-    debugPrint('AdbLocator: No local adb binary found in SDK, PATH, or bundled dirs.');
+    debugPrint(
+        'AdbLocator: No local adb binary found in SDK, PATH, or bundled dirs.');
     return null;
   }
 

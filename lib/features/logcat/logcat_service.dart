@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import '../../core/adb/adb_backend.dart';
 import '../../core/utils/ring_buffer.dart';
 import 'logcat_parser.dart';

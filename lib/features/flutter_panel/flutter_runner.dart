@@ -56,7 +56,8 @@ class FlutterRunner {
 
     _flutterProcess!.exitCode.then((code) {
       _isRunning = false;
-      _consoleController.add('[Hopper] Flutter process exited with code $code.\n');
+      _consoleController
+          .add('[Hopper] Flutter process exited with code $code.\n');
     });
   }
 

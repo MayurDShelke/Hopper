@@ -14,12 +14,14 @@ adb-41234-connect._adb-tls-connect._tcp.\t192.168.1.100:41234
       final services = AdbMdnsFallback.parseServices(output);
       expect(services.length, 2);
 
-      final pairing = services.firstWhere((s) => s.type == DiscoveredServiceType.pairing);
+      final pairing =
+          services.firstWhere((s) => s.type == DiscoveredServiceType.pairing);
       expect(pairing.ip, '192.168.1.100');
       expect(pairing.port, 38291);
       expect(pairing.instanceName, 'adb-38291-pairing');
 
-      final connect = services.firstWhere((s) => s.type == DiscoveredServiceType.connect);
+      final connect =
+          services.firstWhere((s) => s.type == DiscoveredServiceType.connect);
       expect(connect.ip, '192.168.1.100');
       expect(connect.port, 41234);
       expect(connect.instanceName, 'adb-41234-connect');

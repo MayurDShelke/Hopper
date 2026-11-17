@@ -32,7 +32,8 @@ class DiscoveryService implements DiscoveryBackend {
     try {
       _mdnsClient = MDnsClient();
       await _mdnsClient!.start();
-      _pollTimer = Timer.periodic(const Duration(seconds: 4), (_) => _scanMdns());
+      _pollTimer =
+          Timer.periodic(const Duration(seconds: 4), (_) => _scanMdns());
       _scanMdns();
     } catch (e) {
       debugPrint('mDNS client failed to start, falling back to adb mdns: $e');
@@ -63,13 +64,16 @@ class DiscoveryService implements DiscoveryBackend {
 
     for (final serviceType in [pairingType, connectType]) {
       try {
-        await for (final PtrResourceRecord ptr in _mdnsClient!.lookup<PtrResourceRecord>(
-          ResourceRecordQuery.ptr(serviceType),
+        await for (final PtrResourceRecord ptr
+            in _mdnsClient!.lookup<PtrResourceRecord>(
+          ResourceRecordQuery.serverPointer(serviceType),
         )) {
-          await for (final SrvResourceRecord srv in _mdnsClient!.lookup<SrvResourceRecord>(
-            ResourceRecordQuery.srv(ptr.domainName),
+          await for (final SrvResourceRecord srv
+              in _mdnsClient!.lookup<SrvResourceRecord>(
+            ResourceRecordQuery.service(ptr.domainName),
           )) {
-            await for (final IPAddressResourceRecord ip in _mdnsClient!.lookup<IPAddressResourceRecord>(
+            await for (final IPAddressResourceRecord ip
+                in _mdnsClient!.lookup<IPAddressResourceRecord>(
               ResourceRecordQuery.addressIPv4(srv.target),
             )) {
               final isPairing = serviceType.contains('pairing');

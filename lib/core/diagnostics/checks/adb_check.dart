@@ -21,7 +21,8 @@ class AdbDiagnosticCheck implements DiagnosticCheck {
         title: title,
         status: DiagnosticStatus.failed,
         message: 'No adb executable found in SDK or PATH.',
-        fixPrompt: 'Install Android SDK Platform Tools or configure custom path in Settings.',
+        fixPrompt:
+            'Install Android SDK Platform Tools or configure custom path in Settings.',
       );
     }
 

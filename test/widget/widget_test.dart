@@ -39,7 +39,8 @@ void main() {
       );
 
       expect(find.text('No Devices Found'), findsOneWidget);
-      expect(find.text('Turn on wireless debugging to connect.'), findsOneWidget);
+      expect(
+          find.text('Turn on wireless debugging to connect.'), findsOneWidget);
       expect(find.byType(ElevatedButton), findsOneWidget);
 
       await tester.tap(find.byType(ElevatedButton));

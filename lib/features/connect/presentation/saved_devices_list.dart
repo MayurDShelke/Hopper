@@ -48,7 +48,8 @@ class SavedDevicesListWidget extends ConsumerWidget {
                 ),
                 subtitle: Text(
                   '${dev.lastIp}:${dev.lastPort} • Auto-reconnect: ${dev.autoReconnect ? "On" : "Off"}',
-                  style: const TextStyle(fontSize: 12, color: AppTokens.textMuted),
+                  style:
+                      const TextStyle(fontSize: 12, color: AppTokens.textMuted),
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,

@@ -52,8 +52,7 @@ final settingsRepoProvider = Provider<SettingsRepo>((ref) {
   return SettingsRepo();
 });
 
-final savedDevicesListProvider =
-    FutureProvider<List<SavedDevice>>((ref) async {
+final savedDevicesListProvider = FutureProvider<List<SavedDevice>>((ref) async {
   final repo = ref.watch(savedDevicesRepoProvider);
   return repo.getSavedDevices();
 });

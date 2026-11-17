@@ -1,7 +1,60 @@
 import 'dart:ffi';
 import 'dart:io';
+import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:win32/win32.dart';
+
+const int _jobObjectLimitKillOnJobClose = 0x00002000;
+const int _jobObjectExtendedLimitInformationClass = 9;
+
+final class _JobObjectBasicLimitInformation extends Struct {
+  @Int64()
+  external int perProcessUserTimeLimit;
+  @Int64()
+  external int perJobUserTimeLimit;
+  @Uint32()
+  external int limitFlags;
+  @Size()
+  external int minimumWorkingSetSize;
+  @Size()
+  external int maximumWorkingSetSize;
+  @Uint32()
+  external int activeProcessLimit;
+  @IntPtr()
+  external int affinity;
+  @Uint32()
+  external int priorityClass;
+  @Uint32()
+  external int schedulingClass;
+}
+
+final class _IoCounters extends Struct {
+  @Uint64()
+  external int readOperationCount;
+  @Uint64()
+  external int writeOperationCount;
+  @Uint64()
+  external int otherOperationCount;
+  @Uint64()
+  external int readTransferCount;
+  @Uint64()
+  external int writeTransferCount;
+  @Uint64()
+  external int otherTransferCount;
+}
+
+final class _JobObjectExtendedLimitInformation extends Struct {
+  external _JobObjectBasicLimitInformation basicLimitInformation;
+  external _IoCounters ioInfo;
+  @Size()
+  external int processMemoryLimit;
+  @Size()
+  external int jobMemoryLimit;
+  @Size()
+  external int peakProcessMemoryLimit;
+  @Size()
+  external int peakJobMemoryLimit;
+}
 
 class WindowsJobObject {
   int _jobHandle = 0;
@@ -17,15 +70,14 @@ class WindowsJobObject {
         return;
       }
 
-      final info = calloc<JOBOBJECT_EXTENDED_LIMIT_INFORMATION>();
-      info.ref.BasicLimitInformation.LimitFlags =
-          JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+      final info = calloc<_JobObjectExtendedLimitInformation>();
+      info.ref.basicLimitInformation.limitFlags = _jobObjectLimitKillOnJobClose;
 
       final res = SetInformationJobObject(
         _jobHandle,
-        JOBOBJECTINFOCLASS.JobObjectExtendedLimitInformation,
+        _jobObjectExtendedLimitInformationClass,
         info.cast(),
-        sizeOf<JOBOBJECT_EXTENDED_LIMIT_INFORMATION>(),
+        sizeOf<_JobObjectExtendedLimitInformation>(),
       );
 
       calloc.free(info);

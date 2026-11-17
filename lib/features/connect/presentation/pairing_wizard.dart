@@ -80,7 +80,8 @@ class _PairingWizardState extends ConsumerState<PairingWizard>
 
     if (ip.isEmpty || port <= 0 || code.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter valid IP, port, and 6-digit code')),
+        const SnackBar(
+            content: Text('Please enter valid IP, port, and 6-digit code')),
       );
       return;
     }

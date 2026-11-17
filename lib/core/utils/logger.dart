@@ -44,7 +44,8 @@ class AppLogger {
   }
 
   void info(String tag, String message) => log(LogLevel.info, tag, message);
-  void warning(String tag, String message) => log(LogLevel.warning, tag, message);
+  void warning(String tag, String message) =>
+      log(LogLevel.warning, tag, message);
   void error(String tag, String message) => log(LogLevel.error, tag, message);
   void debug(String tag, String message) => log(LogLevel.debug, tag, message);
 

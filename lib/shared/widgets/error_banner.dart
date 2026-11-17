@@ -20,9 +20,9 @@ class ErrorBanner extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: AppTokens.space8),
       padding: const EdgeInsets.all(AppTokens.space12),
       decoration: BoxDecoration(
-        color: AppTokens.error.withOpacity(0.1),
+        color: AppTokens.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppTokens.radiusMd),
-        border: Border.all(color: AppTokens.error.withOpacity(0.4)),
+        border: Border.all(color: AppTokens.error.withValues(alpha: 0.4)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +72,8 @@ class ErrorBanner extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: AppTokens.error),
                 foregroundColor: AppTokens.error,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               ),
               child: const Text('Fix', style: TextStyle(fontSize: 12)),
             ),

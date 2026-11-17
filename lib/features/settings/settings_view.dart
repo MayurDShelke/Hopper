@@ -86,31 +86,36 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                     children: [
                       const Text(
                         'General Preferences',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: AppTokens.space16),
                       TextField(
                         controller: _adbPathController,
                         decoration: const InputDecoration(
                           labelText: 'Custom ADB Binary Path (Optional)',
-                          hintText: 'C:\\Users\\...\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe',
+                          hintText:
+                              'C:\\Users\\...\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe',
                         ),
                       ),
                       const SizedBox(height: AppTokens.space12),
                       SwitchListTile(
                         title: const Text('Desktop Notifications'),
-                        subtitle: const Text('Show toasts when devices connect or drop'),
+                        subtitle: const Text(
+                            'Show toasts when devices connect or drop'),
                         value: _notifications,
                         onChanged: (v) => setState(() => _notifications = v),
                       ),
                       SwitchListTile(
                         title: const Text('Auto-Reconnect Saved Devices'),
-                        subtitle: const Text('Automatically reconnect paired devices when discovered on LAN'),
+                        subtitle: const Text(
+                            'Automatically reconnect paired devices when discovered on LAN'),
                         value: _autoReconnect,
                         onChanged: (v) => setState(() => _autoReconnect = v),
                       ),
                       SwitchListTile(
-                        title: const Text('Keep Phone Screen Awake During Mirroring'),
+                        title: const Text(
+                            'Keep Phone Screen Awake During Mirroring'),
                         value: _scrcpyStayAwake,
                         onChanged: (v) => setState(() => _scrcpyStayAwake = v),
                       ),
@@ -130,11 +135,13 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('About Hopper', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Text('About Hopper',
+                          style: TextStyle(fontWeight: FontWeight.w600)),
                       SizedBox(height: AppTokens.space8),
                       Text(
                         'Version 1.0.0 • Lightweight Windows desktop wireless ADB companion for Android testing.\nMIT License • Independent and open source.',
-                        style: TextStyle(fontSize: 12, color: AppTokens.textMuted),
+                        style:
+                            TextStyle(fontSize: 12, color: AppTokens.textMuted),
                       ),
                     ],
                   ),

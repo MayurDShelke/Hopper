@@ -22,7 +22,11 @@ class NetworkProfileCheck implements DiagnosticCheck {
     try {
       final res = await Process.run(
         'powershell',
-        ['-NoProfile', '-Command', '(Get-NetConnectionProfile).NetworkCategory'],
+        [
+          '-NoProfile',
+          '-Command',
+          '(Get-NetConnectionProfile).NetworkCategory'
+        ],
         runInShell: false,
       );
 
@@ -39,8 +43,10 @@ class NetworkProfileCheck implements DiagnosticCheck {
           id: id,
           title: title,
           status: DiagnosticStatus.failed,
-          message: 'Active network profile is set to Public. Multicast discovery is blocked.',
-          fixPrompt: 'Change network profile to Private: Windows Settings -> Network & Internet -> Wi-Fi -> Properties -> Private network.',
+          message:
+              'Active network profile is set to Public. Multicast discovery is blocked.',
+          fixPrompt:
+              'Change network profile to Private: Windows Settings -> Network & Internet -> Wi-Fi -> Properties -> Private network.',
         );
       } else {
         return DiagnosticResult(
